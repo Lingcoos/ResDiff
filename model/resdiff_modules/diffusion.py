@@ -90,9 +90,7 @@ class GaussianDiffusion(nn.Module):
         self.conditional = conditional
 
         self.cnn = SimpleCNN(scale_factor=4)
-        self.cnn.load_state_dict(torch.load('/home/lyu4/ssy/'
-                                            'Image-Super-Resolution-via-Iterative-Refinement-master/'
-                                            'pretrain_CNN/cnn_weights.pth'))
+        self.cnn.load_state_dict(torch.load('D:\ResDiff\cnn_weights_not_res.pth'))
         self.cnn.eval()
         for name, para in self.cnn.named_parameters():
             # CNN weights are all frozen

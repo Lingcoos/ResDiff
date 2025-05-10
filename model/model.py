@@ -39,6 +39,8 @@ class DDPM(BaseModel):
             self.optG = torch.optim.Adam(
                 optim_params, lr=opt['train']["optimizer"]["lr"])
             self.log_dict = OrderedDict()
+        
+        # LOAD PRE-TRAINED MODEL
         self.load_network()
         self.print_network()
 

@@ -8,9 +8,9 @@ from tqdm import tqdm
 from torchvision import transforms
 import torch.nn.functional as F
 
-from pretrain_CNN.dataset import SuperResolutionDataset
-from pretrain_CNN.Simple_CNN import SimpleCNN
-from pretrain_CNN.loss import image_compare_loss
+from dataset import SuperResolutionDataset
+from Simple_CNN import SimpleCNN
+from loss import image_compare_loss
 
 
 # trian function
@@ -18,7 +18,7 @@ def train(model, train_loader, criterion, optimizer, device):
     model.train()
     train_loss = 0.0
 
-    for inputs, targets in tqdm(train_loader):
+    for inputs, targets, _, _ in tqdm(train_loader):
         inputs = inputs.to(device)
         targets = targets.to(device)
 
@@ -46,12 +46,12 @@ def calculate_psnr_batch(pred_batch, target_batch, max_val=1.0):
 
 
 def evaluate(model, dataloader, device):
-    root = '/home/lyu4/datasets/ffhq/4x_32_128/cnn_sr_32_128'
+    root = './datasets_32_128/sr_32_128'
     model.eval()
     total_psnr = 0.0
     with torch.no_grad():
         for data in tqdm(dataloader, desc='Test', leave=False):
-            inputs, targets = data
+            inputs, targets, _, _ = data
             inputs, targets = inputs.to(device), targets.to(device)
             outputs = model(inputs)
             total_psnr += calculate_psnr_batch(outputs, targets)
@@ -60,7 +60,7 @@ def evaluate(model, dataloader, device):
 
 # Save the CNN prediction results
 def save_res(model, dataloader, device):
-    root = '/home/lyu4/datasets/ffhq/4x_32_128/cnn_sr_32_128'
+    root = './datasets_32_128/sr_32_128'
     model.eval()
     with torch.no_grad():
         for data in tqdm(dataloader, desc='Test', leave=False):
@@ -68,7 +68,7 @@ def save_res(model, dataloader, device):
             inputs, targets = inputs.to(device), targets.to(device)
             outputs = model(inputs)
             image = ((outputs[0] + 1) / 2)
-            path = path[0].replace('lr_32','cnn_sr_32_128')
+            path = path[0].replace('lr_32','sr_32_128')
             save_image(image, path)
 
 
@@ -80,8 +80,8 @@ def main():
     epochs = 1
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    hr_dir = '/home/lyu4/datasets/ffhq/4x_32_128/hr_128'
-    lr_dir = '/home/lyu4/datasets/ffhq/4x_32_128/lr_32'
+    hr_dir = 'D:\\ResDiff\\datasets_32_128\\hr_128'
+    lr_dir = 'D:\\ResDiff\\datasets_32_128\\lr_32'
 
     transform = transforms.Compose([
         transforms.ToTensor(),
@@ -95,7 +95,7 @@ def main():
 
     # Create models, loss functions and optimizers
     model = SimpleCNN(scale_factor=scale_factor).to(device)
-    model.load_state_dict(torch.load('pretrain_CNN/cnn_weights.pth'))
+    # model.load_state_dict(torch.load('pretrain_CNN/cnn_weights.pth'))
     criterion = image_compare_loss
     optimizer = optim.Adam(model.parameters(), lr=lr)
 

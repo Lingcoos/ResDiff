@@ -10,25 +10,25 @@
         "results": "results",
         "checkpoint": "checkpoint",
         //pretrain model or training state
-        "resume_state": "experiments/sr_ffhq_230319_151351/checkpoint/I90000_E6"
+        "resume_state": "D:\\ResDiff\\experiments\\sr_ffhq_250510_235338\\checkpoint\\I600_E600"
     },
     "datasets": {
         "train": {
             "name": "FFHQ",
             "mode": "HR", // whether need LR img
-            "dataroot": "/home/lyu4/datasets/ffhq/4x_32_128",
+            "dataroot": "./datasets_32_128/",
             "datatype": "img", //lmdb or img, path of img files
             "l_resolution": 32, // low resolution need to super_resolution
             "r_resolution": 128, // high resolution
             "batch_size": 4,
-            "num_workers": 8,
+            "num_workers": 6,
             "use_shuffle": false,
             "data_len": -1 // -1 represents all vector_list used in train
         },
         "val": {
             "name": "FFHQ",
             "mode": "LRHR",
-            "dataroot": "/home/lyu4/datasets/ffhq/4x_32_128",
+            "dataroot": "./datasets_32_128",
             "datatype": "img", //lmdb or img, path of img files
             "l_resolution": 32,
             "r_resolution": 128,
@@ -58,13 +58,13 @@
         "beta_schedule": { // use munual beta_schedule for acceleration
             "train": {
                 "schedule": "linear",
-                "n_timestep": 1000,
+                "n_timestep": 2000,
                 "linear_start": 1e-6,
                 "linear_end": 1e-2
             },
             "val": {
                 "schedule": "linear",
-                "n_timestep": 1000,
+                "n_timestep": 2000,
                 "linear_start": 1e-6,
                 "linear_end": 1e-2
             }
@@ -76,10 +76,10 @@
         }
     },
     "train": {
-        "n_iter": 100000,
-        "val_freq": 1e4,
-        "save_checkpoint_freq": 1e4,
-        "print_freq": 200,
+        "n_iter": 10000,
+        "val_freq": 100,
+        "save_checkpoint_freq": 100,
+        "print_freq": 1,
         "optimizer": {
             "type": "adam",
             "lr": 1e-4

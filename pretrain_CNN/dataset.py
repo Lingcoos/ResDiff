@@ -35,4 +35,4 @@ class SuperResolutionDataset(Dataset):
             lr_image = self.transform(lr_image)
         hr_image = hr_image * (min_max[1] - min_max[0]) + min_max[0]
         lr_image = lr_image * (min_max[1] - min_max[0]) + min_max[0]
-        return lr_image, hr_image , lr_path ,hr_path
+        return lr_image, hr_image , lr_path , hr_path
